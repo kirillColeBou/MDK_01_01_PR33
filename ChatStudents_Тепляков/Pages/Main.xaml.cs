@@ -56,7 +56,7 @@ namespace ChatStudents_Тепляков.Pages
         {
             if(e.Key == Key.Enter)
             {
-                Messages message = new Messages(MainWindow.Instance.LoginUser.Id, SelectedUser.Id, Messages.Text);
+                Messages message = new Messages(MainWindow.Instance.LoginUser.Id, SelectedUser.Id, Message.Text);
                 messagesContext.Messages.Add(message);
                 messagesContext.SaveChanges();
                 parentMessages.Children.Add(new Pages.Items.Message(message, MainWindow.Instance.LoginUser));
