@@ -1,6 +1,7 @@
 ﻿using ChatStudents_Тепляков.Classes;
 using ChatStudents_Тепляков.Classes.Common;
 using ChatStudents_Тепляков.Models;
+using ChatStudents_Тепляков.Pages.Items;
 using System;
 using System.Linq;
 using System.Windows;
@@ -19,6 +20,7 @@ namespace ChatStudents_Тепляков.Pages
         public UsersContext usersContext = new UsersContext();
         public MessagesContext messagesContext = new MessagesContext();
         public DispatcherTimer Timer = new DispatcherTimer() { Interval = new TimeSpan(0,0,3) };
+        
         public Main()
         {
             InitializeComponent();
@@ -29,11 +31,17 @@ namespace ChatStudents_Тепляков.Pages
 
         public void LoadUsers()
         {
-            foreach(Users user in usersContext.Users)
+            foreach (Users user in usersContext.Users)
             {
                 if (user.Id != MainWindow.Instance.LoginUser.Id)
                     parentUsers.Children.Add(new Pages.Items.User(user, this));
             }
+        }
+
+        public void UpdateUsers()
+        {
+            parentUsers.Children.Clear();
+            LoadUsers();
         }
 
         private void Timer_Tick(object sender, EventArgs e)
@@ -48,8 +56,8 @@ namespace ChatStudents_Тепляков.Pages
             imgUser.Source = BitmapFromArrayByte.LoadImage(User.Photo);
             FIO.Content = User.ToFIO();
             parentMessages.Children.Clear();
-            var userMessages = messagesContext.Messages.Where(x => x.UserFrom == MainWindow.Instance.LoginUser.Id && x.UserTo == User.Id).OrderByDescending(x => x.DateSending).FirstOrDefault();
-            if (userMessages != null) parentMessages.Children.Add(new Pages.Items.Message(userMessages, usersContext.Users.Where(x => x.Id == userMessages.UserFrom).First()));
+            foreach (Messages Message in messagesContext.Messages.Where(x => (x.UserFrom == User.Id && x.UserTo == MainWindow.Instance.LoginUser.Id) || (x.UserFrom == MainWindow.Instance.LoginUser.Id && x.UserTo == User.Id)))
+                parentMessages.Children.Add(new Pages.Items.Message(Message, usersContext.Users.Where(x => x.Id == Message.UserFrom).First()));
         }
 
         private void Send(object sender, KeyEventArgs e)
@@ -60,6 +68,8 @@ namespace ChatStudents_Тепляков.Pages
                 messagesContext.Messages.Add(message);
                 messagesContext.SaveChanges();
                 parentMessages.Children.Add(new Pages.Items.Message(message, MainWindow.Instance.LoginUser));
+                Items.User.itemUser.LoadLastMessage();
+                UpdateUsers();
                 Message.Text = "";
             }
         }
