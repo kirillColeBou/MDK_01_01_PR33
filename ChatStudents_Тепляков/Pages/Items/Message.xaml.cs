@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ChatStudents_Тепляков.Classes.Common;
+using ChatStudents_Тепляков.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -18,9 +20,12 @@ namespace ChatStudents_Тепляков.Pages.Items
     /// </summary>
     public partial class Message : UserControl
     {
-        public Message()
+        public Message(Messages messages, Users UserFrom)
         {
             InitializeComponent();
+            imgUser.Source = BitmapFromArrayByte.LoadImage(UserFrom.Photo);
+            FIO.Content = UserFrom.ToFIO();
+            tbMessage.Text = messages.Message;
         }
     }
 }
