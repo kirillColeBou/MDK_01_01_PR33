@@ -34,7 +34,7 @@
                 <ScrollViewer Margin="0,50,0,50">
                     <StackPanel x:Name="parentMessages"/>
                 </ScrollViewer>
-                <TextBox x:Name="Messages" Height="35" VerticalContentAlignment="Center" Margin="10,0,10,10" TextWrapping="Wrap" VerticalAlignment="Bottom" KeyUp="Send" Grid.Column="1"/>
+                <TextBox x:Name="Message" Height="35" VerticalContentAlignment="Center" Margin="10,0,10,10" TextWrapping="Wrap" VerticalAlignment="Bottom" KeyUp="Send" Grid.Column="1"/>
             </Grid>
         </Grid>
     </Grid>
