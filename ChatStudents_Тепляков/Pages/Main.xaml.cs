@@ -48,15 +48,15 @@ namespace ChatStudents_Тепляков.Pages
             imgUser.Source = BitmapFromArrayByte.LoadImage(User.Photo);
             FIO.Content = User.ToFIO();
             parentMessages.Children.Clear();
-            foreach (Messages Message in messagesContext.Messages.Where(x => (x.UserFrom == User.Id && x.UserTo == MainWindow.Instance.LoginUser.Id) || (x.UserFrom == MainWindow.Instance.LoginUser.Id && x.UserTo == User.Id)))
-                parentMessages.Children.Add(new Pages.Items.Message(Message, usersContext.Users.Where(x => x.Id == Message.UserFrom).First()));
+            var userMessages = messagesContext.Messages.Where(x => x.UserFrom == MainWindow.Instance.LoginUser.Id && x.UserTo == User.Id).OrderByDescending(x => x.DateSending).FirstOrDefault();
+            if (userMessages != null) parentMessages.Children.Add(new Pages.Items.Message(userMessages, usersContext.Users.Where(x => x.Id == userMessages.UserFrom).First()));
         }
 
         private void Send(object sender, KeyEventArgs e)
         {
             if(e.Key == Key.Enter)
             {
-                Messages message = new Messages(MainWindow.Instance.LoginUser.Id, SelectedUser.Id, Message.Text);
+                Messages message = new Messages(MainWindow.Instance.LoginUser.Id, SelectedUser.Id, Message.Text, DateTime.Now);
                 messagesContext.Messages.Add(message);
                 messagesContext.SaveChanges();
                 parentMessages.Children.Add(new Pages.Items.Message(message, MainWindow.Instance.LoginUser));
