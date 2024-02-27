@@ -68,11 +68,12 @@ namespace ChatStudents_Тепляков.Pages
             {
                 MainWindow.Instance.LoginUser = usersContext.Users.Where(x => x.Firstname == Firstname.Text && x.Lastname == Lastname.Text && x.Surname == Surname.Text).First();
                 MainWindow.Instance.LoginUser.Photo = File.ReadAllBytes(srcUserImage);
+                MainWindow.Instance.LoginUser.Online = DateTime.Now;
                 usersContext.SaveChanges();
             }
             else
             {
-                usersContext.Users.Add(new Users(Lastname.Text, Firstname.Text, Surname.Text, File.ReadAllBytes(srcUserImage)));
+                usersContext.Users.Add(new Users(Lastname.Text, Firstname.Text, Surname.Text, File.ReadAllBytes(srcUserImage), DateTime.Now));
                 usersContext.SaveChanges();
                 MainWindow.Instance.LoginUser = usersContext.Users.Where(x => x.Firstname == Firstname.Text && x.Lastname == Lastname.Text && x.Surname == Surname.Text).First();
             }

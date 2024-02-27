@@ -17,27 +17,20 @@ namespace ChatStudents_Тепляков.Pages.Items
     {
         public static User itemUser;
         MessagesContext messagesContext = new MessagesContext();
+        UsersContext usersContext = new UsersContext();
         Users user;
         Main main;
 
-        public User(Users user, Main main)
+        public User(Users user, Main main, bool online)
         {
             InitializeComponent();
             itemUser = this;
             this.user = user;
             this.main = main;
-            UserOnline();
             LoadLastMessage();
             imgUser.Source = BitmapFromArrayByte.LoadImage(user.Photo);
             FIO.Content = user.ToFIO();
-        }
-
-        public void UserOnline()
-        {
-            var lastUserMessage = messagesContext.Messages.Where(x => x.UserTo == MainWindow.Instance.LoginUser.Id).OrderByDescending(x => x.DateSending).FirstOrDefault();
-            if (lastUserMessage != null)
-                if (lastUserMessage.DateSending.AddMinutes(5) >= DateTime.Now)
-                    imgOnline.Visibility = Visibility.Visible;
+            if (online == true) imgOnline.Visibility = Visibility.Visible;
         }
 
         public void LoadLastMessage()

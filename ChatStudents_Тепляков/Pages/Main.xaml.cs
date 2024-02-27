@@ -16,6 +16,7 @@ namespace ChatStudents_Тепляков.Pages
     /// </summary>
     public partial class Main : Page
     {
+        public static Main main;
         public Users SelectedUser = null;
         public UsersContext usersContext = new UsersContext();
         public MessagesContext messagesContext = new MessagesContext();
@@ -24,6 +25,7 @@ namespace ChatStudents_Тепляков.Pages
         public Main()
         {
             InitializeComponent();
+            main = this;
             LoadUsers();
             Timer.Tick += Timer_Tick;
             Timer.Start();
@@ -31,10 +33,15 @@ namespace ChatStudents_Тепляков.Pages
 
         public void LoadUsers()
         {
+            var fiveMinutesAgo = DateTime.Now.AddMinutes(-5);
+
             foreach (Users user in usersContext.Users)
             {
                 if (user.Id != MainWindow.Instance.LoginUser.Id)
-                    parentUsers.Children.Add(new Pages.Items.User(user, this));
+                {
+                    bool isOnline = user.Online >= fiveMinutesAgo;
+                    parentUsers.Children.Add(new Pages.Items.User(user, this, isOnline));
+                }
             }
         }
 

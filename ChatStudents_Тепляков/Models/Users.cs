@@ -11,13 +11,15 @@ namespace ChatStudents_Тепляков.Models
         public string Firstname { get; set; }
         public string Surname { get; set; }
         public byte[] Photo { get; set; }
+        public DateTime Online { get; set; }
 
-        public Users(string Lastname, string Firstname, string Surname, byte[] Photo)
+        public Users(string Lastname, string Firstname, string Surname, byte[] Photo, DateTime Online)
         {
             this.Lastname = Lastname;
             this.Firstname = Firstname;
             this.Surname = Surname;
             this.Photo = Photo;
+            this.Online = Online;
         }
 
         public string ToFIO()
